@@ -196,12 +196,12 @@ export const WordleGame = () => {
   };
 
   return (
-    <div className="fixed inset-0 overflow-hidden flex flex-col items-center bg-white dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center h-full w-full max-w-lg mx-auto px-4 py-8 gap-6">
+    <div className="fixed inset-0 flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden">
+      <div className="w-full h-full max-w-lg mx-auto px-4 flex flex-col">
         <Toaster 
           position="top-center"
           containerStyle={{
-            top: '5rem',
+            top: '1rem',
           }}
           toastOptions={{
             style: {
@@ -210,27 +210,31 @@ export const WordleGame = () => {
             duration: 1500,
           }}
         />
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="text-center mt-4 mb-2">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Wordle
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-xs text-gray-600 dark:text-gray-400">
             Guess the 5-letter word in 6 tries
           </p>
         </div>
-        <div className="flex flex-col items-center gap-6 w-full">
-          <WordleGrid 
-            guesses={guesses}
-            currentGuess={currentGuess}
-            currentRow={guesses.length}
-            word={word}
-            gameState={gameState}
-          />
-          <WordleKeyboard 
-            onKeyPress={onKeyPress}
-            guesses={guesses}
-            solution={word}
-          />
+        <div className="flex-1 flex flex-col justify-between items-center gap-2 w-full overflow-hidden">
+          <div className="flex-grow flex items-center">
+            <WordleGrid 
+              guesses={guesses}
+              currentGuess={currentGuess}
+              currentRow={guesses.length}
+              word={word}
+              gameState={gameState}
+            />
+          </div>
+          <div className="mb-2">
+            <WordleKeyboard 
+              onKeyPress={onKeyPress}
+              guesses={guesses}
+              solution={word}
+            />
+          </div>
         </div>
         
         {/* Stats Modal */}
