@@ -1,26 +1,8 @@
 'use client';
 
-import AnimatedSection from '@/components/AnimatedSection';
-import { motion } from 'framer-motion';
 import { FaDiscord, FaMusic } from 'react-icons/fa';
 import { IconType } from 'react-icons';
-import React, { useState, useEffect } from 'react';
-
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
-};
+import React from 'react';
 
 interface Project {
   title: string;
@@ -59,33 +41,20 @@ const projects: Project[] = [
 ];
 
 export default function Projects() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
   return (
     <section className="min-h-screen py-20">
-      <AnimatedSection className="container mx-auto px-4">
+      <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold mb-12 text-center">
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
             Projects
           </span>
         </h2>
 
-        <motion.div
-          className="max-w-4xl mx-auto grid gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isLoaded ? "visible" : "hidden"}
-        >
+        <div className="max-w-4xl mx-auto grid gap-8">
           {projects.map((project, index) => (
-            <motion.div
+            <div
               key={index}
-              variants={itemVariants}
               className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all"
-              whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="bg-blue-600 p-3 rounded-lg text-white">
@@ -116,10 +85,10 @@ export default function Projects() {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
-      </AnimatedSection>
+        </div>
+      </div>
     </section>
   );
-} 
+}

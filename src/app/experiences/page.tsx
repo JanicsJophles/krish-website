@@ -244,7 +244,7 @@ export default function Experiences() {
 
   return (
     <section className="min-h-screen py-12 sm:py-20">
-      <AnimatedSection className="container mx-auto px-2 sm:px-4">
+      <AnimatedSection className="container mx-auto px-4 sm:px-4">
         <h2 className="text-3xl sm:text-4xl font-bold mb-8 sm:mb-12 text-center">
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
             Experience Timeline
@@ -274,7 +274,7 @@ export default function Experiences() {
         </motion.div>
         
         <motion.div 
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto pl-4 sm:pl-0"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

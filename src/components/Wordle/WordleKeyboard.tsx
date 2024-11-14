@@ -14,40 +14,52 @@ export const WordleKeyboard = ({ onKeyPress, guesses, solution }: WordleKeyboard
   ];
 
   const getKeyStatus = (key: string) => {
-    const usedLetters = new Set<string>();
-    const correctLetters = new Set<string>();
-    const presentLetters = new Set<string>();
-
-    guesses.forEach(guess => {
-      if (!guess) return;
-      guess.split('').forEach((letter, i) => {
-        usedLetters.add(letter);
-        if (solution[i] === letter) {
-          correctLetters.add(letter);
-        } else if (solution.includes(letter)) {
-          presentLetters.add(letter);
+    const flatGuesses = guesses.join('');
+    if (!flatGuesses.includes(key)) return 'unused';
+    
+    for (const guess of guesses) {
+      if (!guess) continue;
+      
+      const index = guess.indexOf(key);
+      if (index >= 0) {
+        if (solution[index] === key) {
+          return 'correct';
         }
-      });
-    });
+      }
+    }
+    
+    return solution.includes(key) ? 'present' : 'absent';
+  };
 
-    if (correctLetters.has(key)) return 'bg-green-500 dark:bg-green-600 text-white';
-    if (presentLetters.has(key)) return 'bg-yellow-500 dark:bg-yellow-600 text-white';
-    if (usedLetters.has(key)) return 'bg-gray-500 dark:bg-gray-600 text-white';
-    return 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600';
+  const getKeyClassName = (key: string) => {
+    const status = getKeyStatus(key);
+    const baseClasses = "flex-1 min-w-[2rem] px-3 py-4 m-0.5 text-sm font-bold rounded transition-colors duration-200";
+    
+    const specialKeyClasses = key === 'ENTER' || key === 'BACKSPACE' 
+      ? 'min-w-[4.5rem]' 
+      : '';
+    
+    switch (status) {
+      case 'correct':
+        return `${baseClasses} ${specialKeyClasses} bg-green-500 text-white hover:bg-green-600`;
+      case 'present':
+        return `${baseClasses} ${specialKeyClasses} bg-yellow-500 text-white hover:bg-yellow-600`;
+      case 'absent':
+        return `${baseClasses} ${specialKeyClasses} bg-gray-700 dark:bg-gray-800 text-white hover:bg-gray-800 dark:hover:bg-gray-900`;
+      default:
+        return `${baseClasses} ${specialKeyClasses} bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700`;
+    }
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full max-w-xl">
       {rows.map((row, i) => (
         <div key={i} className="flex gap-1.5 justify-center">
           {row.map((key) => (
             <button
               key={key}
               onClick={() => onKeyPress(key)}
-              className={`${
-                key.length > 1 ? 'px-4' : 'w-11'
-              } h-14 font-bold rounded-lg transition-all duration-200 
-              shadow-sm hover:shadow-md active:scale-95 ${getKeyStatus(key)}`}
+              className={getKeyClassName(key)}
             >
               {key === 'BACKSPACE' ? '←' : key}
             </button>
