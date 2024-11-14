@@ -14,47 +14,62 @@ export const WordleKeyboard = ({ onKeyPress, guesses, solution }: WordleKeyboard
   ];
 
   const getKeyStatus = (key: string) => {
-    const flatGuesses = guesses.join('');
-    if (!flatGuesses.includes(key)) return 'unused';
+    const letterCount = solution.split('').reduce((acc, curr) => 
+      curr === key ? acc + 1 : acc, 0
+    );
+    
+    let correctCount = 0;
+    let presentCount = 0;
     
     for (const guess of guesses) {
       if (!guess) continue;
       
-      const index = guess.indexOf(key);
-      if (index >= 0) {
-        if (solution[index] === key) {
-          return 'correct';
+      guess.split('').forEach((letter, index) => {
+        if (letter === key && solution[index] === key) {
+          correctCount++;
         }
+      });
+      
+      if (correctCount < letterCount) {
+        guess.split('').forEach((letter, index) => {
+          if (letter === key && solution[index] !== key) {
+            if (presentCount + correctCount < letterCount) {
+              presentCount++;
+            }
+          }
+        });
       }
     }
     
-    return solution.includes(key) ? 'present' : 'absent';
+    if (correctCount > 0) return 'correct';
+    if (presentCount > 0) return 'present';
+    return guesses.some(guess => guess?.includes(key)) ? 'absent' : 'unused';
   };
 
   const getKeyClassName = (key: string) => {
     const status = getKeyStatus(key);
-    const baseClasses = "flex-1 min-w-[2rem] px-3 py-4 m-0.5 text-sm font-bold rounded transition-colors duration-200";
+    const baseClasses = "touch-manipulation select-none flex-1 px-1 py-3 sm:px-2 sm:py-4 m-0.5 text-base font-bold rounded-md transition-colors duration-200";
     
     const specialKeyClasses = key === 'ENTER' || key === 'BACKSPACE' 
-      ? 'min-w-[4.5rem]' 
-      : '';
+      ? 'min-w-[3.5rem] sm:min-w-[4rem]' 
+      : 'min-w-[2rem] sm:min-w-[2.25rem]';
     
     switch (status) {
       case 'correct':
-        return `${baseClasses} ${specialKeyClasses} bg-green-500 text-white hover:bg-green-600`;
+        return `${baseClasses} ${specialKeyClasses} bg-green-500 text-white active:bg-green-600`;
       case 'present':
-        return `${baseClasses} ${specialKeyClasses} bg-yellow-500 text-white hover:bg-yellow-600`;
+        return `${baseClasses} ${specialKeyClasses} bg-yellow-500 text-white active:bg-yellow-600`;
       case 'absent':
-        return `${baseClasses} ${specialKeyClasses} bg-gray-700 dark:bg-gray-800 text-white hover:bg-gray-800 dark:hover:bg-gray-900`;
+        return `${baseClasses} ${specialKeyClasses} bg-gray-700 dark:bg-gray-800 text-white active:bg-gray-800 dark:active:bg-gray-900`;
       default:
-        return `${baseClasses} ${specialKeyClasses} bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700`;
+        return `${baseClasses} ${specialKeyClasses} bg-gray-200 dark:bg-gray-600 active:bg-gray-300 dark:active:bg-gray-700`;
     }
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-xl">
+    <div className="flex flex-col gap-1.5 w-full max-w-xl px-1 sm:px-0">
       {rows.map((row, i) => (
-        <div key={i} className="flex gap-1.5 justify-center">
+        <div key={i} className="flex gap-1 justify-center">
           {row.map((key) => (
             <button
               key={key}
