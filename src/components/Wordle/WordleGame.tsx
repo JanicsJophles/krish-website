@@ -196,8 +196,8 @@ export const WordleGame = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden">
-      <div className="w-full h-full max-w-lg mx-auto px-4 flex flex-col">
+    <div className="h-[100dvh] w-full flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden pt-32">
+      <div className="w-full max-w-lg mx-auto px-4 flex flex-col h-full">
         <Toaster 
           position="top-center"
           containerStyle={{
@@ -210,16 +210,20 @@ export const WordleGame = () => {
             duration: 1500,
           }}
         />
-        <div className="text-center mt-4 mb-2">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Wordle
-          </h1>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            Guess the 5-letter word in 6 tries
-          </p>
-        </div>
-        <div className="flex-1 flex flex-col justify-between items-center gap-2 w-full overflow-hidden">
-          <div className="flex-grow flex items-center">
+        
+        {/* Main game section - centered in remaining space */}
+        <div className="flex-1 flex flex-col justify-center gap-4">
+          {/* Header section */}
+          <header className="text-center">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Wordle
+            </h1>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">
+              Guess the 5-letter word in 6 tries
+            </p>
+          </header>
+
+          <div className="flex justify-center">
             <WordleGrid 
               guesses={guesses}
               currentGuess={currentGuess}
@@ -228,7 +232,8 @@ export const WordleGame = () => {
               gameState={gameState}
             />
           </div>
-          <div className="mb-2">
+          
+          <div className="w-full max-w-md mx-auto mt-auto">
             <WordleKeyboard 
               onKeyPress={onKeyPress}
               guesses={guesses}

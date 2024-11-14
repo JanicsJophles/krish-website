@@ -10,7 +10,7 @@ export interface WordleGridProps {
 
 export const WordleGrid = ({ guesses, currentGuess, word, gameState, currentRow }: WordleGridProps) => {
   const getLetterClassName = (letter: string, index: number, guess: string, rowIndex: number) => {
-    const baseClasses = "w-12 h-12 sm:w-14 sm:h-14 border-2 flex items-center justify-center text-lg sm:text-xl font-bold uppercase";
+    const baseClasses = "w-[3.25rem] h-[3.25rem] sm:w-14 sm:h-14 border-2 flex items-center justify-center text-xl sm:text-2xl font-bold uppercase";
     
     if (!letter) return `${baseClasses} border-gray-300 dark:border-gray-600`;
     
@@ -54,7 +54,7 @@ export const WordleGrid = ({ guesses, currentGuess, word, gameState, currentRow 
 
 
   return (
-    <div className="grid grid-rows-6 gap-1">
+    <div className="grid grid-rows-6 gap-1 px-1">
       {Array(6).fill(null).map((_, rowIndex) => (
         <div key={rowIndex} className="grid grid-cols-5 gap-1">
           {Array(5).fill(null).map((_, colIndex) => {
@@ -69,8 +69,8 @@ export const WordleGrid = ({ guesses, currentGuess, word, gameState, currentRow 
             return (
               <div
                 key={colIndex}
-                className={`w-12 h-12 sm:w-14 sm:h-14 border-2 border-gray-300 dark:border-gray-700 
-                  flex items-center justify-center text-lg sm:text-xl font-bold rounded-lg
+                className={`w-[3.25rem] h-[3.25rem] sm:w-14 sm:h-14 border-2 border-gray-300 dark:border-gray-700 
+                  flex items-center justify-center text-xl sm:text-2xl font-bold rounded-lg
                   transition-all duration-300 ${bgColor}
                   ${letter ? 'scale-105' : 'scale-100'}`}
               >
