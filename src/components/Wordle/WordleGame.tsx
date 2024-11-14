@@ -196,7 +196,7 @@ export const WordleGame = () => {
   };
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden pt-32">
+    <div className="h-[100dvh] w-full flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden pt-24">
       <div className="w-full max-w-lg mx-auto px-4 flex flex-col h-full">
         <Toaster 
           position="top-center"
