@@ -48,11 +48,11 @@ export const WordleKeyboard = ({ onKeyPress, guesses, solution }: WordleKeyboard
 
   const getKeyClassName = (key: string) => {
     const status = getKeyStatus(key);
-    const baseClasses = "touch-manipulation select-none flex-1 px-1 py-3 sm:px-2 sm:py-4 m-0.5 text-sm sm:text-base font-bold rounded-md transition-colors duration-200";
+    const baseClasses = "touch-manipulation select-none flex-1 px-1 py-2 m-0.5 text-sm sm:text-base font-bold rounded-md transition-colors duration-200";
     
     const specialKeyClasses = key === 'ENTER' || key === 'BACKSPACE' 
-      ? 'min-w-[4rem] sm:min-w-[4.5rem]' 
-      : 'min-w-[2rem] sm:min-w-[2.25rem]';
+      ? 'min-w-[3.5rem] sm:min-w-[4.5rem]' 
+      : 'min-w-[1.75rem] sm:min-w-[2.25rem]';
     
     switch (status) {
       case 'correct':
@@ -67,9 +67,9 @@ export const WordleKeyboard = ({ onKeyPress, guesses, solution }: WordleKeyboard
   };
 
   return (
-    <div className="flex flex-col gap-1 w-full max-w-xl mx-auto px-1 pb-4">
+    <div className="flex flex-col gap-1 w-full max-w-xl mx-auto px-0.5 pb-2">
       {rows.map((row, i) => (
-        <div key={i} className="flex gap-0.5 justify-center">
+        <div key={i} className="flex gap-1 justify-center">
           {row.map((key) => (
             <button
               key={key}

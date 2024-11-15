@@ -10,7 +10,7 @@ export interface WordleGridProps {
 
 export const WordleGrid = ({ guesses, currentGuess, word, gameState, currentRow }: WordleGridProps) => {
   const getLetterClassName = (letter: string, index: number, guess: string, rowIndex: number) => {
-    const baseClasses = "w-[3.25rem] h-[3.25rem] sm:w-14 sm:h-14 border-2 flex items-center justify-center text-xl sm:text-2xl font-bold uppercase";
+    const baseClasses = "w-[3.25rem] h-[3.25rem] sm:w-16 sm:h-16 border-2 flex items-center justify-center text-xl sm:text-2xl font-bold uppercase";
     
     if (!letter) return `${baseClasses} border-gray-300 dark:border-gray-600`;
     
@@ -69,7 +69,7 @@ export const WordleGrid = ({ guesses, currentGuess, word, gameState, currentRow 
             return (
               <div
                 key={colIndex}
-                className={`w-[3.25rem] h-[3.25rem] sm:w-14 sm:h-14 border-2 border-gray-300 dark:border-gray-700 
+                className={`w-[3.25rem] h-[3.25rem] sm:w-16 sm:h-16 border-2 border-gray-300 dark:border-gray-700 
                   flex items-center justify-center text-xl sm:text-2xl font-bold rounded-lg
                   transition-all duration-300 ${bgColor}
                   ${letter ? 'scale-105' : 'scale-100'}`}

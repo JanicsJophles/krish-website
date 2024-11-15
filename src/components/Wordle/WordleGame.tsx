@@ -196,8 +196,8 @@ export const WordleGame = () => {
   };
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden pt-24">
-      <div className="w-full max-w-lg mx-auto px-4 flex flex-col h-full">
+    <div className="h-[100dvh] w-full flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden pt-20">
+      <div className="w-full max-w-lg mx-auto px-2 flex flex-col h-full">
         <Toaster 
           position="top-center"
           containerStyle={{
@@ -211,10 +211,10 @@ export const WordleGame = () => {
           }}
         />
         
-        {/* Main game section - centered in remaining space */}
-        <div className="flex-1 flex flex-col justify-center gap-4">
-          {/* Header section */}
-          <header className="text-center">
+        {/* Main game section */}
+        <div className="flex-1 flex flex-col justify-between gap-4">
+          {/* Header section - adjusted margin-top */}
+          <header className="text-center mt-2">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Wordle
             </h1>
@@ -233,7 +233,7 @@ export const WordleGame = () => {
             />
           </div>
           
-          <div className="w-full max-w-md mx-auto mt-auto">
+          <div className="w-full max-w-md mx-auto">
             <WordleKeyboard 
               onKeyPress={onKeyPress}
               guesses={guesses}
