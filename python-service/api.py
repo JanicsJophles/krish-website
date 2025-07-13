@@ -33,6 +33,7 @@ def convert_yt_to_mp3(url: str = Query(..., description="YouTube video URL")):
         ydl_opts = {
             'format': 'bestaudio/best',
             'outtmpl': f'{DOWNLOADS_FOLDER}/%(title).200s.%(ext)s',
+            'cookiefile': 'youtube_cookies.txt',
             'writethumbnail': True,
             'postprocessors': [
                 {'key': 'FFmpegExtractAudio', 'preferredcodec': 'mp3', 'preferredquality': '192'},
@@ -40,7 +41,6 @@ def convert_yt_to_mp3(url: str = Query(..., description="YouTube video URL")):
                 {'key': 'FFmpegMetadata'}
             ],
             'quiet': True,
-            'cookiefile': 'youtube_cookies.txt',
         }
 
         with YoutubeDL(ydl_opts) as ydl:
