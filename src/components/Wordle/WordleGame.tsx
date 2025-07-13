@@ -13,6 +13,32 @@ interface GameStats {
   lastGameState?: string;
 }
 
+// Move getRandomWord outside the component to keep it stable for hooks
+const checkWordExists = async (word: string) => {
+  try {
+    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
+
+const getRandomWord = async (): Promise<string> => {
+  try {
+    const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
+    const [randomWord] = await response.json();
+    const isValid = await checkWordExists(randomWord);
+    if (isValid) {
+      return randomWord.toUpperCase();
+    }
+    // Recursively get a valid word
+    return getRandomWord();
+  } catch (error) {
+    console.error('Error fetching random word:', error);
+    return 'REACT'; // fallback word
+  }
+};
+
 export const WordleGame = () => {
   const [word, setWord] = useState<string>('');
   const [guesses, setGuesses] = useState<string[]>([]);
@@ -39,7 +65,7 @@ export const WordleGame = () => {
 
   const [stats, setStats] = useState<GameStats>(getInitialStats);
 
-  // Make sure to interact with localStorage only on the client side
+  // Load saved guesses and game state from localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedGuesses = localStorage.getItem('wordleGuesses');
@@ -52,30 +78,6 @@ export const WordleGame = () => {
     }
   }, []);
 
-  const checkWordExists = async (word: string) => {
-    try {
-      const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-      return response.ok;
-    } catch {
-      return false;
-    }
-  };
-
-  const getRandomWord = async () => {
-    try {
-      const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
-      const [randomWord] = await response.json();
-      const isValid = await checkWordExists(randomWord);
-      if (isValid) {
-        return randomWord.toUpperCase();
-      }
-      return getRandomWord();
-    } catch (error) {
-      console.error('Error fetching random word:', error);
-      return 'REACT';
-    }
-  };
-
   const onKeyPress = useCallback(async (key: string) => {
     if (gameState !== 'playing') return;
 
@@ -84,10 +86,10 @@ export const WordleGame = () => {
         toast.error('Word must be 5 letters long!');
         return;
       }
-      
+
       const guessLower = currentGuess.toLowerCase();
       const isValidWord = await checkWordExists(guessLower);
-      
+
       if (!isValidWord) {
         toast.error('Not a valid word!');
         return;
@@ -109,6 +111,7 @@ export const WordleGame = () => {
     }
   }, [gameState, guesses, word, currentGuess]);
 
+  // Keyboard event listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (gameState !== 'playing') return;
@@ -121,8 +124,9 @@ export const WordleGame = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameState, onKeyPress, currentGuess]);
+  }, [gameState, onKeyPress]);
 
+  // Load or fetch word on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedWord = localStorage.getItem('wordleWord');
@@ -132,7 +136,6 @@ export const WordleGame = () => {
       if (savedWord && savedDate === today) {
         setWord(savedWord);
       } else {
-        // Handle async word fetching properly
         const fetchNewWord = async () => {
           const newWord = await getRandomWord();
           setWord(newWord);
@@ -144,7 +147,7 @@ export const WordleGame = () => {
     }
   }, []);
 
-  // Save game state to localStorage whenever it changes
+  // Save game state whenever guesses/currentGuess/gameState changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('wordleGuesses', JSON.stringify(guesses));
@@ -157,24 +160,21 @@ export const WordleGame = () => {
   useEffect(() => {
     if (gameState !== 'playing' && gameState !== stats.lastGameState) {
       const newStats = { ...stats };
-      
-      // Only increment if this is a new game ending
-      if (gameState !== stats.lastGameState) {
-        newStats.gamesPlayed++;
-        
-        if (gameState === 'won') {
-          newStats.gamesWon++;
-          newStats.currentStreak++;
-          newStats.maxStreak = Math.max(newStats.maxStreak, newStats.currentStreak);
-        } else if (gameState === 'lost') {
-          newStats.currentStreak = 0;
-        }
-        
-        newStats.lastGameState = gameState;
-        setStats(newStats);
-        localStorage.setItem('wordleStats', JSON.stringify(newStats));
+
+      newStats.gamesPlayed++;
+
+      if (gameState === 'won') {
+        newStats.gamesWon++;
+        newStats.currentStreak++;
+        newStats.maxStreak = Math.max(newStats.maxStreak, newStats.currentStreak);
+      } else if (gameState === 'lost') {
+        newStats.currentStreak = 0;
       }
-      
+
+      newStats.lastGameState = gameState;
+
+      setStats(newStats);
+      localStorage.setItem('wordleStats', JSON.stringify(newStats));
       setShowStats(true);
     }
   }, [gameState, stats]);
@@ -188,8 +188,7 @@ export const WordleGame = () => {
     setCurrentGuess('');
     setGameState('playing');
     setShowStats(false);
-    
-    // Reset lastGameState when starting a new game
+
     const newStats = { ...stats, lastGameState: 'playing' };
     setStats(newStats);
     localStorage.setItem('wordleStats', JSON.stringify(newStats));
@@ -198,7 +197,7 @@ export const WordleGame = () => {
   return (
     <div className="h-[100dvh] w-full flex flex-col items-center bg-white dark:bg-gray-900 overflow-hidden pt-20">
       <div className="w-full max-w-lg mx-auto px-2 flex flex-col h-full">
-        <Toaster 
+        <Toaster
           position="top-center"
           containerStyle={{
             top: '1rem',
@@ -210,10 +209,10 @@ export const WordleGame = () => {
             duration: 1500,
           }}
         />
-        
+
         {/* Main game section */}
         <div className="flex-1 flex flex-col justify-between gap-4">
-          {/* Header section - adjusted margin-top */}
+          {/* Header */}
           <header className="text-center mt-2">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Wordle
@@ -224,7 +223,7 @@ export const WordleGame = () => {
           </header>
 
           <div className="flex justify-center">
-            <WordleGrid 
+            <WordleGrid
               guesses={guesses}
               currentGuess={currentGuess}
               currentRow={guesses.length}
@@ -232,27 +231,28 @@ export const WordleGame = () => {
               gameState={gameState}
             />
           </div>
-          
+
           <div className="w-full max-w-md mx-auto">
-            <WordleKeyboard 
+            <WordleKeyboard
               onKeyPress={onKeyPress}
               guesses={guesses}
               solution={word}
             />
           </div>
         </div>
-        
+
         {/* Stats Modal */}
         {showStats && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-               style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
           >
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
                           bg-white dark:bg-gray-800 rounded-xl p-6 max-w-sm w-[90%] sm:w-full shadow-lg m-4">
               <h2 className="text-2xl font-bold text-center mb-6">
                 {gameState === 'won' ? '🎉 Congratulations!' : `💔 Game Over`}
               </h2>
-              
+
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold">{stats.gamesPlayed}</div>
@@ -260,7 +260,7 @@ export const WordleGame = () => {
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold">
-                    {stats.gamesPlayed > 0 
+                    {stats.gamesPlayed > 0
                       ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100)
                       : 0}%
                   </div>
@@ -281,7 +281,7 @@ export const WordleGame = () => {
                   The word was: <span className="font-bold">{word}</span>
                 </div>
               )}
-              
+
               <button
                 onClick={handlePlayAgain}
                 className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 
@@ -295,4 +295,4 @@ export const WordleGame = () => {
       </div>
     </div>
   );
-}; 
+};
