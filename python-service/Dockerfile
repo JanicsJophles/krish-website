@@ -7,6 +7,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
+# ✅ Ensure cookies file is explicitly copied
+COPY youtube_cookies.txt ./youtube_cookies.txt
+
+# ✅ Copy everything else (including api.py)
 COPY . .
 
 EXPOSE 8000
