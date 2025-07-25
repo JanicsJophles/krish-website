@@ -60,9 +60,9 @@ export const WordleKeyboard = ({ onKeyPress, guesses, solution }: WordleKeyboard
       case 'present':
         return `${baseClasses} ${specialKeyClasses} bg-yellow-500 text-white active:bg-yellow-600`;
       case 'absent':
-        return `${baseClasses} ${specialKeyClasses} bg-gray-700 dark:bg-gray-800 text-white active:bg-gray-800 dark:active:bg-gray-900`;
+        return `${baseClasses} ${specialKeyClasses} bg-gray-500 text-white active:bg-gray-600`;
       default:
-        return `${baseClasses} ${specialKeyClasses} bg-gray-200 dark:bg-gray-600 active:bg-gray-300 dark:active:bg-gray-700`;
+        return `${baseClasses} ${specialKeyClasses} bg-muted active:bg-muted-foreground`;
     }
   };
 

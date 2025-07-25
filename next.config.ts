@@ -1,7 +1,4 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // other configs...
-
   async rewrites() {
     return [
       {

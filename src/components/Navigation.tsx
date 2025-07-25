@@ -32,7 +32,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 py-4 border-b border-gray-200 dark:border-gray-800">
+    <nav className="fixed top-0 w-full bg-background/80 backdrop-blur-sm z-50 py-4 border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <motion.button
@@ -61,11 +61,11 @@ export default function Navigation() {
           </motion.button>
 
           <ul className="hidden lg:flex space-x-8">
-            <li><Link href="/" className="hover:text-blue-600 transition-colors">Home</Link></li>
-            <li><Link href="/experiences" className="hover:text-blue-600 transition-colors">Experiences</Link></li>
-            <li><Link href="/projects" className="hover:text-blue-600 transition-colors">Projects</Link></li>
-            <li><Link href="/contact" className="hover:text-blue-600 transition-colors">Contact</Link></li>
-            <li><Link href="/wordle" className="hover:text-gray-300 transition-colors">Wordle</Link></li>
+            <li><Link href="/" className="hover:text-foreground transition-colors">Home</Link></li>
+            <li><Link href="/experiences" className="hover:text-foreground transition-colors">Experiences</Link></li>
+            <li><Link href="/projects" className="hover:text-foreground transition-colors">Projects</Link></li>
+            <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
+            <li><Link href="/wordle" className="hover:text-foreground transition-colors">Wordle</Link></li>
           </ul>
           <ThemeToggle />
         </div>
@@ -80,11 +80,11 @@ export default function Navigation() {
               variants={menuVariants}
             >
               <ul className="pt-4 pb-2 space-y-4">
-                <li><Link href="/" onClick={handleLinkClick} className="block hover:text-blue-600 transition-colors">Home</Link></li>
-                <li><Link href="/experiences" onClick={handleLinkClick} className="block hover:text-blue-600 transition-colors">Experiences</Link></li>
-                <li><Link href="/projects" onClick={handleLinkClick} className="block hover:text-blue-600 transition-colors">Projects</Link></li>
-                <li><Link href="/contact" onClick={handleLinkClick} className="block hover:text-blue-600 transition-colors">Contact</Link></li>
-                <li><Link href="/wordle" onClick={handleLinkClick} className="block hover:text-gray-300 transition-colors">Wordle</Link></li>
+                <li><Link href="/" onClick={handleLinkClick} className="block hover:text-foreground transition-colors">Home</Link></li>
+                <li><Link href="/experiences" onClick={handleLinkClick} className="block hover:text-foreground transition-colors">Experiences</Link></li>
+                <li><Link href="/projects" onClick={handleLinkClick} className="block hover:text-foreground transition-colors">Projects</Link></li>
+                <li><Link href="/contact" onClick={handleLinkClick} className="block hover:text-foreground transition-colors">Contact</Link></li>
+                <li><Link href="/wordle" onClick={handleLinkClick} className="block hover:text-foreground transition-colors">Wordle</Link></li>
               </ul>
             </motion.div>
           )}

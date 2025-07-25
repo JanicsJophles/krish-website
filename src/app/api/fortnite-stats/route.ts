@@ -6,7 +6,6 @@ export async function GET() {
       throw new Error('Missing required environment variables');
     }
 
-    // Fetch stats
     const statsResponse = await fetch(
       `https://fortnite-api.com/v2/stats/br/v2/${process.env.EPIC_ACCOUNT_ID}`,
       {
@@ -22,7 +21,6 @@ export async function GET() {
 
     const statsData = await statsResponse.json();
 
-    // Try to fetch cosmetics data
     const cosmeticsResponse = await fetch(
       `https://fortnite-api.com/v2/cosmetics/br/search/all`,
       {
@@ -35,17 +33,15 @@ export async function GET() {
     let imageUrl = null;
     if (cosmeticsResponse.ok) {
       const cosmeticsData = await cosmeticsResponse.json();
-      // Get the first featured skin's image if available
       imageUrl = cosmeticsData?.data?.[0]?.images?.icon;
     }
 
-    // Safely access nested properties
     const stats = {
       kills: statsData?.data?.stats?.all?.overall?.kills || 0,
       wins: statsData?.data?.stats?.all?.overall?.wins || 0,
       kd: statsData?.data?.stats?.all?.overall?.kd || 0,
       rank: statsData?.data?.battlePass?.level || 0,
-      image: imageUrl || '/fortnite-icon.png' // Fallback to default icon if no image is available
+      image: imageUrl || '/fortnite-icon.png'
     };
 
     return NextResponse.json(stats);

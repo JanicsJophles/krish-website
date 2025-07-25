@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function YouTubeToMp3() {
   const [url, setUrl] = useState('');
@@ -13,7 +16,7 @@ export default function YouTubeToMp3() {
     setSuccessMessage(null);
 
     if (!url.trim()) {
-      setError('Please enter a YouTube URL.');
+      setError('Please enter a valid YouTube URL.');
       return;
     }
 
@@ -53,34 +56,69 @@ export default function YouTubeToMp3() {
     }
   }
 
+  const isUrlValid = url.trim().length > 0;
+
   return (
-    <div className="p-6 max-w-xl mx-auto bg-white rounded shadow mt-12">
-      <h1 className="text-3xl font-bold mb-6 text-center">YouTube to MP3 Converter</h1>
+    <div className="min-h-screen flex flex-col justify-center items-center bg-background px-4">
+      <Card className="max-w-md w-full">
+        <CardHeader>
+          <CardTitle className="text-4xl font-extrabold text-center">
+            YouTube to MP3
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <Input
+            type="text"
+            placeholder="Paste YouTube URL here..."
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            disabled={loading}
+          />
 
-      <input
-        type="text"
-        placeholder="Enter YouTube URL"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        className="w-full border border-gray-300 rounded px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-        disabled={loading}
-      />
+          <Button
+            onClick={handleConvert}
+            disabled={!isUrlValid || loading}
+            className="w-full"
+          >
+            {loading && (
+              <svg
+                className="animate-spin h-5 w-5 mr-3"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            )}
+            {loading ? 'Converting...' : 'Convert to MP3'}
+          </Button>
 
-      <button
-        onClick={handleConvert}
-        disabled={loading}
-        className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-      >
-        {loading ? 'Converting...' : 'Convert to MP3'}
-      </button>
+          {error && (
+            <p className="text-destructive font-medium text-center">{error}</p>
+          )}
 
-      {error && <p className="mt-4 text-red-600 font-semibold">{error}</p>}
-
-      {successMessage && (
-        <div className="mt-6 p-4 bg-green-100 rounded border border-green-400 text-center">
-          <p className="font-semibold">{successMessage}</p>
-        </div>
-      )}
+          {successMessage && (
+            <div className="p-4 bg-green-100 dark:bg-green-900/20 border border-green-400 dark:border-green-800 rounded text-green-700 dark:text-green-300 text-center font-semibold">
+              {successMessage}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      <footer className="mt-8 text-sm text-muted-foreground">
+        Powered by Your Python Backend
+      </footer>
     </div>
   );
 }

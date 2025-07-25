@@ -4,21 +4,10 @@ import AnimatedSection from '@/components/AnimatedSection';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
-};
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 interface FormData {
   name: string;
@@ -74,106 +63,86 @@ export default function Contact() {
   return (
     <section className="min-h-screen py-20">
       <AnimatedSection className="container mx-auto px-4">
-        <motion.div
-          className="max-w-2xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <div className="max-w-2xl mx-auto">
           <h2 className="text-4xl font-bold mb-8 text-center">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-              Get in Touch
-            </span>
+            <span className="text-foreground">Get in Touch</span>
           </h2>
 
-          <motion.form
-            onSubmit={handleSubmit}
-            className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg"
-            variants={itemVariants}
-          >
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                placeholder="Your name"
-              />
-            </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Send me a message</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                    Name
+                  </label>
+                  <Input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Your name"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                placeholder="your.email@example.com"
-              />
-            </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="your.email@example.com"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows={5}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                placeholder="Your message..."
-              />
-            </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                    Message
+                  </label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={5}
+                    placeholder="Your message..."
+                  />
+                </div>
 
-            <motion.button
-              type="submit"
-              disabled={status === 'sending'}
-              className={`w-full py-3 px-6 rounded-lg text-white font-medium flex items-center justify-center gap-2
-                ${status === 'sending' 
-                  ? 'bg-gray-400 cursor-not-allowed' 
-                  : 'bg-blue-600 hover:bg-blue-700'}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FaPaperPlane className={status === 'sending' ? 'animate-bounce' : ''} />
-              {status === 'sending' ? 'Sending...' : 'Send Message'}
-            </motion.button>
+                <Button
+                  type="submit"
+                  disabled={status === 'sending'}
+                  className="w-full"
+                >
+                  <FaPaperPlane className={`mr-2 ${status === 'sending' ? 'animate-bounce' : ''}`} />
+                  {status === 'sending' ? 'Sending...' : 'Send Message'}
+                </Button>
 
-            {status === 'success' && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-green-500 text-center"
-              >
-                Message sent successfully!
-              </motion.p>
-            )}
+                {status === 'success' && (
+                  <p className="text-green-600 dark:text-green-400 text-center">
+                    Message sent successfully!
+                  </p>
+                )}
 
-            {status === 'error' && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-red-500 text-center"
-              >
-                Failed to send message. Please try again.
-              </motion.p>
-            )}
-          </motion.form>
-        </motion.div>
+                {status === 'error' && (
+                  <p className="text-destructive text-center">
+                    Failed to send message. Please try again.
+                  </p>
+                )}
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </AnimatedSection>
     </section>
   );

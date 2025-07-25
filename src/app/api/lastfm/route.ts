@@ -16,7 +16,6 @@ export async function GET() {
     const data = await response.json();
     const track = data.recenttracks.track[0];
     
-    // Check if the track is currently playing
     const isPlaying = track['@attr']?.nowplaying === 'true';
 
     return NextResponse.json({
@@ -25,7 +24,7 @@ export async function GET() {
         name: track.name,
         artist: track.artist['#text'],
         album: track.album['#text'],
-        image: track.image[2]['#text'], // Medium size image
+        image: track.image[2]['#text'],
         url: track.url
       }
     });
