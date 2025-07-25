@@ -70,7 +70,7 @@ export default function Home() {
               </Button>
               <Button asChild variant="outline">
                 <a 
-                  href="https://github.com/yourusername"
+                  href="https://github.com/JanicsJophles"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

@@ -6,12 +6,12 @@ import { motion } from 'framer-motion';
 const socialLinks = [
   {
     name: 'LinkedIn',
-    url: 'https://www.linkedin.com/feed/',
+    url: 'https://www.linkedin.com/in/krish-vijayvergia-33b54928b/',
     icon: FaLinkedin,
   },
   {
     name: 'GitHub',
-    url: 'https://github.com',
+    url: 'https://github.com/JanicsJophles',
     icon: FaGithub,
   },
   {
