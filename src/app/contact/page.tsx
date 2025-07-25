@@ -1,7 +1,6 @@
 'use client';
 
 import AnimatedSection from '@/components/AnimatedSection';
-import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
